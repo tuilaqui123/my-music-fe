@@ -1,39 +1,68 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import axios from "axios";
+
+// Định nghĩa type rõ ràng
+interface Config {
+  domain: string;
+  user?: any;
+  theme?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+  };
+  // future: auth tokens, user preferences, etc.
+}
+
+interface Data {
+  tracks: any[];
+  // future: playlists, artists, albums, etc.
+}
 
 interface AppContextValue {
-  config: {
-    domain: any;
-  };
-  data: {};
+  config: Config;
+  data: Data;
+
+  // future: methods to update user, theme, etc.
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
 
-export function AppProvider({ children }: { children: React.ReactNode }) {
+export function AppProvider({ children }: { children: ReactNode }) {
   const domain = process.env.NEXT_PUBLIC_DOMAIN || "http://localhost:3001";
 
-  const config = { domain };
+  // Config (cố định, ít thay đổi)
+  const config: Config = {
+    domain,
+    user: null,
+    theme: {
+      primaryColor: "#1DB954",
+      secondaryColor: "#191414",
+    },
+  };
 
-  const data = {};
+  // Data (state động, có thể load từ API)
+  const [tracks, setTracks] = useState<any[]>([]);
 
-  return (
-    <AppContextWrapper config={config} data={data}>
-      {children}
-    </AppContextWrapper>
-  );
-}
+  useEffect(() => {
+    axios
+      .get(`${domain}/tracks`)
+      .then((res) => {
+        setTracks(res.data);
+      })
+      .catch((err) => console.error("Error fetching tracks:", err));
+  }, [domain]);
 
-function AppContextWrapper({
-  children,
-  config,
-  data,
-}: {
-  children: React.ReactNode;
-  config: any;
-  data: any;
-}) {
+  const data: Data = {
+    tracks,
+  };
+
   return (
     <AppContext.Provider value={{ config, data }}>
       {children}
@@ -46,3 +75,6 @@ export const useAppContext = () => {
   if (!ctx) throw new Error("useAppContext must be used inside AppProvider");
   return ctx;
 };
+
+// Debug log to verify context data
+// <pre>{JSON.stringify(data.tracks, null, 2)}</pre>;

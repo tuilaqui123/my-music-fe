@@ -1,5 +1,8 @@
+"use client";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MusicCard from "@/components/music-card";
+import { useAppContext } from "@/context/app.context";
 
 export interface Track {
   id: number;
@@ -10,15 +13,10 @@ export interface Track {
   img_thumb?: string;
 }
 
-export async function getTracks() {
-  const domain = process.env.NEXT_PUBLIC_DOMAIN || "http://localhost:3001";
-  const res = await fetch(`${domain}/tracks`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to fetch tracks");
-  return res.json();
-}
+export default function Page() {
+  const tracks: Track[] = [];
 
-export default async function Page() {
-  const tracks: Track[] = await getTracks();
+  const { data } = useAppContext();
 
   return (
     <div className="flex-1 flex flex-col">
@@ -41,7 +39,7 @@ export default async function Page() {
                 Recently Played
               </h3>
               <div className="space-y-2 grid grid-cols-5 gap-5">
-                {tracks.map((track) => (
+                {data.tracks.map((track) => (
                   <MusicCard key={track.id} track={track} />
                 ))}
               </div>
