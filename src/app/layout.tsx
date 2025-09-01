@@ -7,6 +7,11 @@ import {
   Source_Sans_3 as Source_Sans_Pro,
 } from "next/font/google";
 import "./globals.css";
+import { Sidebar } from "@/components/sidebar";
+import { MainContent } from "@/components/main-content";
+import { BottomNavigation } from "@/components/bottom-navigation";
+import { MusicPlayer } from "@/components/music-player";
+import { AppProvider } from "@/context/app.context";
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
@@ -44,7 +49,24 @@ html {
         `}</style>
       </head>
       <body className={`${playfairDisplay.variable} ${sourceSansPro.variable}`}>
-        {children}
+        <AppProvider>
+          <div className="h-screen bg-background text-foreground flex flex-col">
+            {/* Desktop Layout */}
+            <div className="hidden md:flex flex-1">
+              <Sidebar />
+              {children}
+            </div>
+
+            {/* Mobile Layout */}
+            <div className="md:hidden flex-1 flex flex-col">
+              <MainContent />
+              <BottomNavigation />
+            </div>
+
+            {/* Music Player - Always visible at bottom */}
+            <MusicPlayer />
+          </div>
+        </AppProvider>
       </body>
     </html>
   );

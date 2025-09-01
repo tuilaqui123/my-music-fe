@@ -1,13 +1,14 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Play, MoreHorizontal, Heart } from "lucide-react"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Play, MoreHorizontal, Heart } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Link from "next/link";
 
 export function MainContent() {
-  const [activeTab, setActiveTab] = useState("home")
+  const [activeTab, setActiveTab] = useState("home");
 
   const tabs = [
     { id: "home", label: "Home" },
@@ -15,7 +16,7 @@ export function MainContent() {
     { id: "playlists", label: "Playlists" },
     { id: "artists", label: "Artists" },
     { id: "genres", label: "Genres" },
-  ]
+  ];
 
   const recentlyPlayed = [
     {
@@ -42,7 +43,7 @@ export function MainContent() {
       duration: "3:23",
       cover: "/levitating-album-cover.png",
     },
-  ]
+  ];
 
   const featuredPlaylists = [
     {
@@ -63,12 +64,12 @@ export function MainContent() {
       description: "High energy songs for your workout",
       cover: "/workout-playlist-cover.png",
     },
-  ]
+  ];
 
   return (
     <div className="flex-1 flex flex-col">
       {/* Header with tabs */}
-      <div className="p-6 border-b border-border">
+      {/* <div className="p-6 border-b border-border">
         <div className="flex space-x-6">
           {tabs.map((tab) => (
             <button
@@ -78,10 +79,27 @@ export function MainContent() {
                 activeTab === tab.id
                   ? "text-primary border-primary"
                   : "text-muted-foreground border-transparent hover:text-foreground"
-              }`}
-            >
+              }`}>
               {tab.label}
             </button>
+          ))}
+        </div>
+      </div> */}
+
+      <div className="p-6 border-b border-border">
+        <div className="flex space-x-6">
+          {tabs.map((tab) => (
+            <Link
+              href={`/${tab.id}`}
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`font-heading text-lg font-semibold pb-2 border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? "text-primary border-primary"
+                  : "text-muted-foreground border-transparent hover:text-foreground"
+              }`}>
+              {tab.label}
+            </Link>
           ))}
         </div>
       </div>
@@ -92,16 +110,24 @@ export function MainContent() {
             <div className="space-y-8">
               {/* Welcome Section */}
               <div>
-                <h2 className="font-heading text-3xl font-bold mb-2">Good evening</h2>
-                <p className="text-muted-foreground">Ready to discover your next favorite song?</p>
+                <h2 className="font-heading text-3xl font-bold mb-2">
+                  Good evening
+                </h2>
+                <p className="text-muted-foreground">
+                  Ready to discover your next favorite song?
+                </p>
               </div>
 
               {/* Recently Played */}
               <div>
-                <h3 className="font-heading text-2xl font-semibold mb-4">Recently Played</h3>
+                <h3 className="font-heading text-2xl font-semibold mb-4">
+                  Recently Played
+                </h3>
                 <div className="space-y-2">
                   {recentlyPlayed.map((track) => (
-                    <Card key={track.id} className="bg-card hover:bg-accent/10 transition-colors cursor-pointer">
+                    <Card
+                      key={track.id}
+                      className="bg-card hover:bg-accent/10 transition-colors cursor-pointer">
                       <CardContent className="p-4">
                         <div className="flex items-center space-x-4">
                           <img
@@ -110,7 +136,9 @@ export function MainContent() {
                             className="w-12 h-12 rounded-md object-cover"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="font-semibold truncate">{track.title}</p>
+                            <p className="font-semibold truncate">
+                              {track.title}
+                            </p>
                             <p className="text-sm text-muted-foreground truncate">
                               {track.artist} • {track.album}
                             </p>
@@ -119,7 +147,9 @@ export function MainContent() {
                             <Button size="sm" variant="ghost">
                               <Heart className="h-4 w-4" />
                             </Button>
-                            <span className="text-sm text-muted-foreground">{track.duration}</span>
+                            <span className="text-sm text-muted-foreground">
+                              {track.duration}
+                            </span>
                             <Button size="sm" variant="ghost">
                               <Play className="h-4 w-4" />
                             </Button>
@@ -136,13 +166,14 @@ export function MainContent() {
 
               {/* Featured Playlists */}
               <div>
-                <h3 className="font-heading text-2xl font-semibold mb-4">Made for You</h3>
+                <h3 className="font-heading text-2xl font-semibold mb-4">
+                  Made for You
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {featuredPlaylists.map((playlist) => (
                     <Card
                       key={playlist.id}
-                      className="bg-card hover:bg-accent/10 transition-colors cursor-pointer group"
-                    >
+                      className="bg-card hover:bg-accent/10 transition-colors cursor-pointer group">
                       <CardContent className="p-4">
                         <div className="relative mb-4">
                           <img
@@ -152,13 +183,14 @@ export function MainContent() {
                           />
                           <Button
                             size="sm"
-                            className="absolute bottom-2 right-2 rounded-full w-12 h-12 bg-primary hover:bg-primary/90 opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
+                            className="absolute bottom-2 right-2 rounded-full w-12 h-12 bg-primary hover:bg-primary/90 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Play className="h-5 w-5" />
                           </Button>
                         </div>
                         <h4 className="font-semibold mb-1">{playlist.name}</h4>
-                        <p className="text-sm text-muted-foreground">{playlist.description}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {playlist.description}
+                        </p>
                       </CardContent>
                     </Card>
                   ))}
@@ -172,11 +204,13 @@ export function MainContent() {
               <h3 className="font-heading text-2xl font-semibold mb-2">
                 {tabs.find((tab) => tab.id === activeTab)?.label}
               </h3>
-              <p className="text-muted-foreground">This section is coming soon. Stay tuned for more features!</p>
+              <p className="text-muted-foreground">
+                This section is coming soon. Stay tuned for more features!
+              </p>
             </div>
           )}
         </div>
       </ScrollArea>
     </div>
-  )
+  );
 }

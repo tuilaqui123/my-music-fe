@@ -1,20 +1,29 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Slider } from "@/components/ui/slider"
-import { Play, Pause, SkipBack, SkipForward, Volume2, Heart, Repeat, Shuffle } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import {
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  Heart,
+  Repeat,
+  Shuffle,
+} from "lucide-react";
 
 export function MusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [progress, setProgress] = useState([30])
-  const [volume, setVolume] = useState([75])
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState([0]);
+  const [volume, setVolume] = useState([75]);
 
   const currentTrack = {
     title: "Blinding Lights",
     artist: "The Weeknd",
     cover: "/blinding-lights-album-cover.png",
-  }
+  };
 
   return (
     <div className="bg-card border-t border-border p-4">
@@ -28,7 +37,9 @@ export function MusicPlayer() {
           />
           <div className="min-w-0">
             <p className="font-semibold truncate">{currentTrack.title}</p>
-            <p className="text-sm text-muted-foreground truncate">{currentTrack.artist}</p>
+            <p className="text-sm text-muted-foreground truncate">
+              {currentTrack.artist}
+            </p>
           </div>
           <Button size="sm" variant="ghost">
             <Heart className="h-4 w-4" />
@@ -47,9 +58,12 @@ export function MusicPlayer() {
             <Button
               size="sm"
               className="rounded-full w-10 h-10 bg-primary hover:bg-primary/90"
-              onClick={() => setIsPlaying(!isPlaying)}
-            >
-              {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+              onClick={() => setIsPlaying(!isPlaying)}>
+              {isPlaying ? (
+                <Pause className="h-5 w-5" />
+              ) : (
+                <Play className="h-5 w-5" />
+              )}
             </Button>
             <Button size="sm" variant="ghost">
               <SkipForward className="h-5 w-5" />
@@ -62,7 +76,13 @@ export function MusicPlayer() {
           {/* Progress Bar */}
           <div className="flex items-center space-x-2 w-full">
             <span className="text-xs text-muted-foreground">1:23</span>
-            <Slider value={progress} onValueChange={setProgress} max={100} step={1} className="flex-1" />
+            <Slider
+              value={progress}
+              onValueChange={setProgress}
+              max={100}
+              step={1}
+              className="flex-1"
+            />
             <span className="text-xs text-muted-foreground">3:20</span>
           </div>
         </div>
@@ -70,9 +90,15 @@ export function MusicPlayer() {
         {/* Volume Control */}
         <div className="flex items-center space-x-2 flex-1 justify-end">
           <Volume2 className="h-4 w-4" />
-          <Slider value={volume} onValueChange={setVolume} max={100} step={1} className="w-24" />
+          <Slider
+            value={volume}
+            onValueChange={setVolume}
+            max={100}
+            step={1}
+            className="w-24"
+          />
         </div>
       </div>
     </div>
-  )
+  );
 }
