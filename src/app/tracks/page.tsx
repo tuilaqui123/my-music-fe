@@ -4,19 +4,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import MusicCard from "@/components/music-card";
 import { useAppContext } from "@/context/app.context";
 
-export interface Track {
-  id: number;
-  name: string;
-  artist: string;
-  album: string;
-  duration: string;
-  img_thumb?: string;
-}
-
 export default function Page() {
-  const tracks: Track[] = [];
-
-  const { data } = useAppContext();
+  const { state, actions } = useAppContext();
 
   return (
     <div className="flex-1 flex flex-col">
@@ -39,8 +28,12 @@ export default function Page() {
                 Recently Played
               </h3>
               <div className="space-y-2 grid grid-cols-5 gap-5">
-                {data.tracks.map((track) => (
-                  <MusicCard key={track.id} track={track} />
+                {state.tracks.map((track) => (
+                  <MusicCard
+                    key={track.id}
+                    track={track}
+                    onClick={() => actions.setCurrentTrack(track)} // click chọn bài => set + play luôn
+                  />
                 ))}
               </div>
             </div>

@@ -15,11 +15,18 @@ interface Track {
   img_thumb?: string;
 }
 
-export default function MusicCard({ track }: { track: Track }) {
+export default function MusicCard({
+  track,
+  onClick,
+}: {
+  track: Track;
+  onClick: () => void;
+}) {
   const { config } = useAppContext();
   return (
     <Card
       key={track.id}
+      onClick={onClick}
       className="bg-card hover:bg-accent transition-colors cursor-pointer h-auto group">
       <CardContent>
         <div className="flex flex-col items-center justify-center gap-3">
