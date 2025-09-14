@@ -18,6 +18,17 @@ export interface Track {
   img_thumb?: string;
 }
 
+export interface Upload {
+  link?: string; // Trường hợp import từ YouTube
+  files?: File[]; // Trường hợp upload file nhạc
+  artwork?: File | null; // Ảnh bìa album
+  title?: string;
+  artist?: string;
+  album?: string;
+  genre?: string;
+  description?: string;
+}
+
 // Định nghĩa type rõ ràng
 interface Config {
   domain: string;
@@ -42,6 +53,8 @@ export interface Actions {
   play: () => void;
   pause: () => void;
   togglePlay: () => void;
+
+  uploadTracks: (upload: Upload) => Promise<void>;
 
   // Quản lý danh sách
   // addToQueue: (track: Track) => void;
@@ -113,6 +126,46 @@ export function AppProvider({ children }: { children: ReactNode }) {
     play: () => setIsPlaying(true),
     pause: () => setIsPlaying(false),
     togglePlay: () => setIsPlaying((p) => !p),
+
+    // Upload track
+    uploadTracks: async (upload) => {
+      try {
+        const formData = new FormData();
+
+        // Nếu upload file
+        if (upload.files && upload.files.length > 0) {
+          upload.files.forEach((file) => formData.append("files", file));
+        }
+
+        // Artwork
+        if (upload.artwork) {
+          formData.append("artwork", upload.artwork);
+        }
+
+        // Metadata
+        if (upload.link) formData.append("link", upload.link);
+        if (upload.title) formData.append("title", upload.title);
+        if (upload.artist) formData.append("artist", upload.artist);
+        if (upload.album) formData.append("album", upload.album);
+        if (upload.genre) formData.append("genre", upload.genre);
+        if (upload.description)
+          formData.append("description", upload.description);
+
+        const res = await axios.post(`${domain}/upload`, formData, {
+          headers: { "Content-Type": "application/json" },
+        });
+
+        // Nếu API trả về track mới → thêm vào state
+        if (res.data) {
+          setTracks((prev) => [...prev, res.data]);
+        }
+
+        console.log("✅ Upload success:", res.data);
+      } catch (error) {
+        console.error("❌ Upload error:", error);
+        throw error;
+      }
+    },
   };
 
   //=======================================================================================================================

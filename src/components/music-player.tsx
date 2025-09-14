@@ -13,6 +13,7 @@ import {
   Repeat,
   Shuffle,
   MoreHorizontal,
+  VolumeOff,
 } from "lucide-react";
 import { useAppContext } from "@/context/app.context";
 
@@ -23,6 +24,8 @@ export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState([0]);
   const [volume, setVolume] = useState([100]);
+  const [isMuted, setIsMuted] = useState(false);
+  const [lastVolume, setLastVolume] = useState(100);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -83,6 +86,19 @@ export function MusicPlayer() {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  const toggleMute = () => {
+    if (isMuted) {
+      // Unmute -> khôi phục volume trước đó
+      setVolume([lastVolume || 50]);
+      setIsMuted(false);
+    } else {
+      // Mute -> lưu lại volume cũ rồi set 0
+      setLastVolume(volume[0]);
+      setVolume([0]);
+      setIsMuted(true);
+    }
   };
 
   return (
@@ -166,7 +182,13 @@ export function MusicPlayer() {
 
         {/* Volume Control */}
         <div className="flex items-center space-x-2 flex-1 justify-end">
-          <Volume2 className="h-4 w-4" />
+          <button onClick={toggleMute}>
+            {isMuted || volume[0] === 0 ? (
+              <VolumeOff className="h-4 w-4" />
+            ) : (
+              <Volume2 className="h-4 w-4" />
+            )}
+          </button>
           <Slider
             value={volume}
             onValueChange={setVolume}

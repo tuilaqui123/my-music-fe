@@ -8,6 +8,7 @@ import {
   Heart,
   ListMusic,
   Star,
+  CloudUpload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -19,6 +20,7 @@ export function Sidebar() {
     { icon: Search, label: "Search", path: "/search" },
     { icon: Music, label: "Recently Played", path: "/recently-played" },
     { icon: Library, label: "Your Library", path: "/tracks" },
+    { icon: CloudUpload, label: "Upload", path: "/upload" },
   ];
 
   const libraryItems = [
